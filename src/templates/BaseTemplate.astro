@@ -1,0 +1,38 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+
+interface Props{
+    pageTitle: string;
+}
+
+const {pageTitle} = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>ToDO App - {pageTitle}</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500&display=swap" rel="stylesheet">
+		<ViewTransitions />
+	</head>
+	<body class="p-4 font-roboto">
+        <header class="md:w-2/4 mx-auto flex items-center mb-4 shadow-sm p-3">
+            <h1 class="mr-auto text-3xl font-bold text-center">ToDo App</h1>
+            <nav>
+                <ul class="flex">
+                    <li><a class="p-2 border-r hover:bg-gray-100 duration-200" href="./">Home</a></li>
+                    <li><a class="p-2 hover:bg-gray-100 duration-200" href="./todos">Todos</a></li>
+                </ul>
+            </nav>
+
+        </header>
+		<main>
+            <slot />
+        </main>
+	</body>
+</html>

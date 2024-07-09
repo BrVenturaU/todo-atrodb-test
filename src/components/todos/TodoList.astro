@@ -1,0 +1,19 @@
+---
+import { TodoStatus } from "@enums/TodoEnums";
+import TodoItem from "./TodoItem.astro";
+import {db, Todos} from 'astro:db';
+
+const todos = await db.select().from(Todos);
+---
+
+<div class="grid grid-cols-2 gap-2">
+  {
+    todos.map((todo) => (
+      <TodoItem
+        title={todo.title}
+        description={todo.description}
+        status={TodoStatus[todo.status as keyof typeof TodoStatus]}
+      />
+    ))
+  }
+</div>

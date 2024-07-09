@@ -1,0 +1,83 @@
+---
+import { navigate } from "astro:transitions/client";
+---
+
+<form id="todo-form">
+  <div class="flex justify-between items-center my-3">
+    <label for="title">Title: </label>
+    <input
+      id="title"
+      name="title"
+      class="border py-1 px-2 rounded focus:outline-blue-300"
+      placeholder="Title..."
+    />
+  </div>
+  <div class="flex justify-between items-center my-3">
+    <label for="description">Description: </label>
+    <input
+      id="description"
+      name="description"
+      class="border py-1 px-2 rounded focus:outline-blue-300"
+      placeholder="Description..."
+    />
+  </div>
+  <div class="flex justify-end items-center gap-4 my-3">
+    <label for="active"
+      >Active: <input
+        id="active"
+        value="ACTIVE"
+        name="status"
+        type="radio"
+        checked
+      /></label
+    >
+    <label for="completed"
+      >Completed: <input
+        id="completed"
+        value="COMPLETED"
+        name="status"
+        type="radio"
+      /></label
+    >
+  </div>
+  <button
+    type="submit"
+    class="text-white bg-green-700 hover:bg-green-900 block ml-auto py-2 px-4 rounded shadow transition-colors duration-200"
+  >
+    Save
+  </button>
+</form>
+
+<script>
+  import { navigate } from "astro:transitions/client";
+
+  interface TodoFormElements extends HTMLFormControlsCollection {
+    title: HTMLInputElement;
+    description: HTMLInputElement;
+    status: HTMLInputElement;
+  }
+  document.addEventListener("astro:page-load", (e) => {
+    const targetEl = e.target as Document;
+    const todoFormEl = targetEl.getElementById("todo-form") as HTMLFormElement;
+    todoFormEl.onsubmit = async (e) => {
+      e.preventDefault();
+      const elements = todoFormEl.elements as TodoFormElements;
+      const todo = {
+        title: elements.title.value,
+        description: elements.description.value,
+        status: elements.status.value,
+      };
+
+      const response = await fetch("/api/todos", {
+        body: JSON.stringify(todo),
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+      });
+
+      if (response.redirected) navigate(response.url);
+    };
+  });
+</script>
